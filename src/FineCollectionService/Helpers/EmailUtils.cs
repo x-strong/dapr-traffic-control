@@ -4,7 +4,7 @@ public class EmailUtils
 {
     public static string CreateEmailBody(
         SpeedingViolation speedingViolation,
-        VehicleInfo vehicleInfo,
+        Models.VehicleInfo vehicleInfo,
         string fine)
     {
         return $@"

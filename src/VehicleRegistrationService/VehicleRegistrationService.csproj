@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\vehicleinfo.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapr.AspNetCore" Version="1.8.0" />
     <PackageReference Include="RandomNamegeneratorLibrary" Version="1.2.2" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
   </ItemGroup>
 
 

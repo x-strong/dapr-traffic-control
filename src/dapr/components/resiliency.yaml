@@ -7,10 +7,13 @@ scopes:
 spec:
   policies:
     timeouts:
-      short: 1s
+      # timeout policy definitions
 
     retries:
-      # retry policy definitions
+      general:
+        policy: constant
+        duration: 1s
+        maxRetries: 3
 
     circuitBreakers:
       # circuit breaker policy definitions
@@ -18,7 +21,7 @@ spec:
   targets:
     apps:
       # vehicleregistrationservice:
-      #   timeout: short
+      #   retry: general
 
     actors:
       # actor types and their applied policies here

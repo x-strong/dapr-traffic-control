@@ -35,7 +35,7 @@ public class InMemoryVehicleInfoRepository : IVehicleInfoRepository
         _nameGenerator = new PersonNameGenerator(_rnd);
     }
 
-    public VehicleInfo GetVehicleInfo(string licenseNumber)
+    public Models.VehicleInfo GetVehicleInfo(string licenseNumber)
     {
         // simulate slow IO
         Thread.Sleep(_rnd.Next(5, 200));
@@ -49,7 +49,7 @@ public class InMemoryVehicleInfoRepository : IVehicleInfoRepository
         var ownerEmail = $"{ownerName.ToLowerInvariant().Replace(' ', '.')}@outlook.com";
 
         // return info
-        return new VehicleInfo
+        return new Models.VehicleInfo
         {
             VehicleId = licenseNumber,
             Brand = brand,
