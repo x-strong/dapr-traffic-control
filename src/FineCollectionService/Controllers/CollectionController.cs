@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 
 namespace FineCollectionService.Controllers;
 
@@ -43,9 +44,23 @@ public class CollectionController : ControllerBase
     [Topic("pubsub", "speedingviolations", "deadletters", false)]
     [Route("collectfine")]
     [HttpPost()]
-    public async Task<ActionResult> CollectFine(SpeedingViolation speedingViolation, [FromServices] DaprClient daprClient)
+    public async Task<ActionResult> CollectFine(
+        SpeedingViolation speedingViolation,
+        [FromServices] DaprClient daprClient,
+        [FromServices] IConfiguration configuration)
     {
         decimal fine = _fineCalculator.CalculateFine(_fineCalculatorLicenseKey!, speedingViolation.ViolationInKmh);
+
+        // apply a special end-of-year quote multiplier if configured
+        if (decimal.TryParse(configuration["multiplier"], NumberStyles.Number, CultureInfo.InvariantCulture, out var multiplier)
+            && multiplier != 1)
+        {
+            decimal updatedFine = fine * multiplier;
+
+            _logger.LogInformation($"Applying fine multiplier ({multiplier}): {fine} -> {updatedFine}");
+
+            fine = updatedFine;
+        }
 
         // get owner info (Dapr service invocation)
         var vehicleInfo = _vehicleRegistrationService.GetVehicleInfo(speedingViolation.VehicleId).Result;
